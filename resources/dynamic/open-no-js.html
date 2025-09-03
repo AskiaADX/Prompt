@@ -1,0 +1,34 @@
+{%
+Dim inputName  =  CurrentQuestion.InputName()
+Dim inputValue =  CurrentQuestion.InputValue()
+
+Dim placeholder = CurrentADC.PropValue("placeholder")
+Dim attrPlaceholder = On(placeholder <> "", "placeholder=\"" + placeholder + "\"", "")
+
+Dim attrRequired = On(CurrentQuestion.IsAllowDK, "","required=\"required\"")
+
+Dim maxchar = CurrentADC.PropValue("maxChar")
+Dim attrMaxLength = "maxlength=\"" + maxchar + "\""
+Dim minchar = CurrentADC.PropValue("minChar")
+Dim attrMinLength = "minlength=\"" + minchar + "\""
+
+Dim countorder = CurrentADC.PropValue("counter")
+
+dim arearows = CurrentADC.PropValue("areaRows")
+dim areacolumns = CurrentADC.PropValue("areaColumns")
+'cols="areacolumns"
+dim attrControlAlign = CurrentADC.PropValue("controlAlign")
+
+dim attrInputType = CurrentADC.PropValue("inputType")
+
+'On(countOrder="desc",maxchar,"0")
+%}
+<div id="adc_{%= CurrentADC.InstanceId %}" class="adc-prompt">
+    <div class="adc-open-content {%=attrControlAlign%}">
+        {%If attrInputType = "textarea" then %}
+        	<textarea class="contentinput" autocomplete="off" rows="{%=arearows%}" name="{%= inputName %}" {%:= attrPlaceholder %} {%:= attrMaxLength %} {%:= attrMinLength %} {%:= attrRequired %} >{%= inputValue %}</textarea>
+        {%Else%}
+        	<input type="{%=attrInputType%}" autocomplete="off" class="contentinput" name="{%= inputName %}" {%:= attrPlaceholder %} {%:= attrMaxLength %} {%:= attrMinLength %} {%:= attrRequired %} value="{%= inputValue %}" />
+  		 {%Endif%}
+    </div>
+</div>

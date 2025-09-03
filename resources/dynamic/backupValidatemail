@@ -1,0 +1,28 @@
+{% 
+
+Dim adcSelector = "#adc_" + CurrentADC.InstanceId
+Dim counterisabove = (CurrentADC.PropValue("counterPosition").Left(1)="N")
+Dim counterclassselector = ".counterdiv"
+dim emailvalidationmessage = CurrentADC.PropValue("emailValidationMessage")
+%}
+
+function validatemail(){
+	var options = {
+    	direction:"{%=countOrder%}", 
+    	maxchar:"{%=maxchar%}", 
+        adcSelector: '{%=adcSelector%}',
+        emailvalidationmessage:"{%=emailvalidationmessage%}",
+        address:""
+	};
+    
+    var box1 = document.getElementById("{%=CurrentQuestion.InputName()%}_open1");
+   	var box2 = document.getElementById("{%=CurrentQuestion.InputName()%}_open2");
+   	var box3 = document.getElementById("{%=CurrentQuestion.InputName()%}_open3");
+   	var emailaddress =  document.getElementById( "{%=CurrentQuestion.InputName()%}");
+    emailaddress.value= box1.value + "@" + box2.value +"." + box3.value;
+   if((box1.value) && (box2.value) && (box3.value)){
+		options.address = emailaddress.value; 
+        validatemailStatic(options);
+   }                                  
+    
+}

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<control  xmlns="http://www.askia.com/2.2.0/ADCSchema"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.askia.com/2.2.0/ADCSchema https://raw.githubusercontent.com/AskiaADX/ADXSchema/2.2.0/ADCSchema.xsd"
+          version="2.2.0"
+          askiaCompat="5.5.2">
+  <info>
+    <name>OpenPrompt</name>
+    <guid>8b1644fe-83cc-4a97-b946-be47f512aeba</guid>
+    <version>0.7.4</version>
+    <date>2025-08-29</date>
+    <description><![CDATA[An ADC that shows random prompts to motivate respondents while filling out an open question]]></description>
+    <company>Askia</company>
+    <author><![CDATA[Jordan Grindle]]></author>
+    <site>www.askia.com</site>
+    <helpURL></helpURL>
+    <categories>
+      <category>Prompt</category>
+      <category>Features</category>
+      <category>Styling</category>
+    </categories>
+    <constraints>
+      <constraint on="questions" single="false" multiple="false" numeric="true" date="false" open="true" chapter="false" requireParentLoop="false" requireLoopDepth="0" />
+      <constraint on="controls" responseblock="true" checkbox="true" label="true" listbox="false" radiobutton="true" textbox="true" />
+      <constraint on="responses" max="*" min="*" />
+    </constraints>
+  </info>
+  <outputs defaultOutput="default">
+    <output id="default" manageLoopDepth="1">
+      <condition><![CDATA[Browser.support("Javascript")]]></condition>
+      <content fileName="open.js" type="javascript" mode="static" position="head" />
+      <content fileName="default.html" type="html" mode="dynamic" position="placeholder" />
+      <content fileName="open_loop.html" type="html" mode="dynamic" position="none" />
+      <content fileName="open.html" type="html" mode="dynamic" position="none" />
+      <content fileName="open.css" type="css" mode="static" position="head" />
+      <content fileName="open.css" type="css" mode="dynamic" position="head" />
+      <content fileName="default.js" type="javascript" mode="dynamic" position="foot" />
+      <content fileName="open_loop.js" type="javascript" mode="dynamic" position="none" />
+      <content fileName="aiprompt.js" type="javascript" mode="dynamic" position="none" />
+      <content fileName="simpleprompt.js" type="javascript" mode="dynamic" position="none" />
+      <content fileName="aiprompt.css" type="css" mode="static" position="head" />
+    </output>
+    <output id="No_JS" manageLoopDepth="1">
+      <condition><![CDATA[Browser.support("Javascript")=0]]></condition>
+      <content fileName="open-no-js.html" type="html" mode="dynamic" position="placeholder" />
+      <content fileName="open.css" type="css" mode="dynamic" position="head" />
+      <content fileName="open.css" type="css" mode="static" position="head" />
+    </output>
+  </outputs>
+  <properties>
+    <category id="prompt" name="Prompt">
+      <property xsi:type="standardProperty" id="useAI" name="Prompt Model" type="number" require="false" visible="true" min="0" max="1">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[1]]></value>
+        <options>
+          <option value="1" text="Survey Question" />
+          <option value="0" text="AI Model" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="promptQuestion" name="Prompt Question" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[question shortcut]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="maxPrompts" name="Number of prompts to return (0 = unlimited)" type="number" mode="dynamic" require="false" visible="true" min="0">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[5]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="timePrompts" name="Seconds between prompts (0 = disabled)" type="number" mode="dynamic" require="false" visible="true" min="0">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[7]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="minChars" name="Minimum number of characters" type="number" mode="dynamic" require="false" visible="true" min="0">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[3]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="useSpace" name="Trigger prompt on Space" type="number" require="false" visible="true" min="0" max="1">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[1]]></value>
+        <options>
+          <option value="1" text="Yes" />
+          <option value="0" text="No" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="useEnd" name="Trigger prompt on punctuation (.,!?;)" type="number" require="false" visible="true" min="0" max="1">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[1]]></value>
+        <options>
+          <option value="1" text="Yes" />
+          <option value="0" text="No" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="hideNext" name="Hide Next button until prompt is triggered" type="number" require="false" visible="true" min="0" max="1">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[1]]></value>
+        <options>
+          <option value="1" text="Yes" />
+          <option value="0" text="No" />
+        </options>
+      </property>
+    </category>
+    <category id="connection" name="Connection Details">
+      <property xsi:type="standardProperty" id="apiAuth" name="Authentication Token" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value></value>
+      </property>
+      <property xsi:type="standardProperty" id="apiHead" name="Authentication Header" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[x-litellm-api-key]]></value>
+      </property>
+    </category>
+    <category id="features" name="Features">
+      <property xsi:type="standardProperty" id="minChar" name="Minimum number of characters" type="number" mode="dynamic" require="false" visible="true" min="0">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[0]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="maxChar" name="Maximum number of characters" type="number" mode="dynamic" require="false" visible="true" min="1" decimal="0">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[50]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="inputType" name="Type of input" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[text]]></value>
+        <options>
+          <option value="textarea" text="Text area (multi line)" />
+          <option value="text" text="Text input (single line)" />
+          <option value="number" text="Number box" />
+          <option value="email" text="Email address" />
+          <option value="password" text="Password" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="useBrowserValidation" name="Use Browser Validation" type="number" require="false" visible="true" min="0" max="1">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[1]]></value>
+        <options>
+          <option value="1" text="Yes" />
+          <option value="0" text="No" />
+        </options>
+      </property>
+    </category>
+    <category id="looped" name="Looped Questions">
+      <property xsi:type="standardProperty" id="isInLoop" name="Is in loop" type="string" mode="dynamic" require="true" visible="true">
+        <description><![CDATA[Turn this on to use the control in a loop]]></description>
+        <value><![CDATA[0]]></value>
+        <options>
+          <option value="1" text="Yes" />
+          <option value="0" text="No" />
+        </options>
+      </property>
+    </category>
+    <category id="ExclusiveResponses" name="Exclusive Responses">
+      <property xsi:type="standardProperty" id="useExclusive" name="Use Exclusive Question" type="string" mode="dynamic" require="true" visible="true">
+        <description><![CDATA[Select 'Yes' if the main question going to use an Exclusive question]]></description>
+        <value><![CDATA[no]]></value>
+        <options>
+          <option value="yes" text="Yes" />
+          <option value="no" text="No" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="exclusiveResponsesQuestion" name="Question with exclusive codes" type="question" require="false" visible="true">
+        <description><![CDATA[Select the question for set exclusive responses]]></description>
+        <value><![CDATA[none]]></value>
+      </property>
+    </category>
+    <category id="Counter" name="Character counter">
+      <property xsi:type="standardProperty" id="counter" name="Character counting" type="string" mode="dynamic" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[desc]]></value>
+        <options>
+          <option value="desc" text="descending" />
+          <option value="asc" text="ascending with target" />
+          <option value="none" text="none" />
+          <option value="asc-simple" text="ascending" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="counterPosition" name="Position of the counter" type="string" require="false" visible="true">
+        <description><![CDATA[Relatively to the text area]]></description>
+        <value><![CDATA[NE]]></value>
+        <options>
+          <option value="NW" text="North-West" />
+          <option value="NE" text="North-East" />
+          <option value="SW" text="South-West" />
+          <option value="SE" text="South-East" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="counterFontSize" name="Font size of the counter relatively to the input" type="number" require="false" visible="true" min="0.1" max="3">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[0.75]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="prefixText" name="Prefix text" type="string" mode="dynamic" require="true" visible="true">
+        <description><![CDATA[Prefix text when choosing text counter]]></description>
+        <value></value>
+      </property>
+    </category>
+    <category id="PlaceHolder" name="Placeholder style">
+      <property xsi:type="standardProperty" id="placeholder" name="Placeholder text" type="string" mode="dynamic" require="false" visible="true">
+        <description><![CDATA[Using HTML 5, in modern browser.
+          Helper text shows in the input when it's empty.]]></description>
+        <value></value>
+      </property>
+      <property xsi:type="standardProperty" id="floatingLabel" name="Floating Label" type="string" mode="dynamic" require="true" visible="true">
+        <description><![CDATA[Enable floating label styling]]></description>
+        <value><![CDATA[0]]></value>
+        <options>
+          <option value="1" text="Yes" />
+          <option value="0" text="No" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="floatingLabelTextColor" name="Color of the floating label" type="color" require="false" visible="true" colorFormat="rgb">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.SecondaryColor.ToRGB() %}]]></value>
+      </property>
+    </category>
+    <category id="Nudge" name="Nudge features">
+      <property xsi:type="standardProperty" id="suggestedChar" name="Suggested number of characters" type="number" mode="dynamic" require="true" visible="true" min="0" decimal="0">
+        <description><![CDATA[Suggested number of characters]]></description>
+        <value><![CDATA[0]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="suggestedCharText" name="Text associated to suggested number of characters" type="string" require="true" visible="true">
+        <description><![CDATA[Text associated to suggested number of characters]]></description>
+        <value><![CDATA[Suggested :]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="showCongrats" name="Show congratulations" type="boolean" require="true" visible="true">
+        <description><![CDATA[show congratulation message when suggestion is met]]></description>
+        <value><![CDATA[false]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="congratsMessage" name="Congratulation message" type="string" require="true" visible="true">
+        <description><![CDATA[Congratulation message when suggestion is met]]></description>
+        <value><![CDATA[Thank you for your answer]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="congratsMessageBGColor" name="Congratulation message background color" type="color" require="true" visible="true" colorFormat="rgba">
+        <description><![CDATA[Congratulation message background color]]></description>
+        <value><![CDATA[52,179,0,1]]></value>
+      </property>
+    </category>
+    <category id="styling" name="Styling">
+      <property xsi:type="standardProperty" id="fontSizeFactor" name="font size multiplicator" type="number" mode="dynamic" require="false" visible="false" min="5">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[1]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="textColor" name="Text color" type="color" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[0,0,0]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="controlAlign" name="Control horizontal alignment" type="string" mode="dynamic" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[center]]></value>
+        <options>
+          <option value="left" text="left" />
+          <option value="center" text="center" />
+          <option value="right" text="right" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="controlWidth" name="Maximum width" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[500px]]></value>
+        <options>
+          <option value="100%" text="100%" />
+          <option value="600px" text="600px" />
+          <option value="500px" text="500px" />
+          <option value="400px" text="400px" />
+          <option value="300px" text="300px" />
+          <option value="200px" text="200px" />
+          <option value="100px" text="100px" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="areaTextAlign" name="Text alignment in the area" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[left]]></value>
+        <options>
+          <option value="left" text="left" />
+          <option value="center" text="center" />
+          <option value="right" text="right" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="paddingText" name="Text padding" type="string" require="false" visible="true">
+        <description><![CDATA[The padding of the text]]></description>
+        <value><![CDATA[10px 0 10px 10px]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="opacity" name="Opacity" type="number" require="false" visible="true" min="0" max="1" decimal="2">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[1]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="areaRows" name="Number of rows" type="number" require="false" visible="true" min="1">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[2]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="areaColumns" name="Number of columns" type="number" require="false" visible="true" min="1">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[25]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="allowResize" name="allow respondent to resize" type="string" mode="dynamic" require="true" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[0]]></value>
+        <options>
+          <option value="1" text="Yes" />
+          <option value="0" text="No" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="lineHeight" name="Line Height" type="number" require="false" visible="false">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.LineHeight%}]]></value>
+      </property>
+    </category>
+    <category id="Styling_default" name="Styling default state">
+      <property xsi:type="standardProperty" id="borderColor" name="Border color" type="color" mode="dynamic" require="false" visible="true" colorFormat="rgb">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.NeutralDarkColor.ToRGB() %}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="bgColor" name="Background color" type="color" mode="dynamic" require="true" visible="false" colorFormat="rgb">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.NeutralLightColor.ToRGB() %}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="borderSize" name="Border thickness" type="string" require="false" visible="false" min="1">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.BorderWidth%}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="borderStyle" name="Border style" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[solid]]></value>
+        <options>
+          <option value="solid" text="solid" />
+          <option value="none" text="none" />
+          <option value="dashed" text="dashed" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="borderRadius" name="Border radius (in px)" type="string" require="false" visible="false">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.BorderRadius %}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="borderShadow" name="Border shadow (in px)" type="number" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[0]]></value>
+      </property>
+    </category>
+    <category id="Styling_Hover" name="Styling when mouse hovers">
+      <property xsi:type="standardProperty" id="hoverBorderColor" name="Border color on hover" type="color" mode="dynamic" require="false" visible="true" colorFormat="rgb">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.SecondaryColor.ToRGB() %}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="hoverBGColor" name="Background color on hover" type="color" require="false" visible="true" colorFormat="rgb">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.WhiteColor.ToRGB() %}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="hoverBorderSize" name="Border thickness on hover" type="string" require="false" visible="false">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.BorderWidth%}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="hoverBorderStyle" name="Border style on hover" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[solid]]></value>
+        <options>
+          <option value="solid" text="solid" />
+          <option value="none" text="none" />
+          <option value="dashed" text="dashed" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="hoverBorderRadius" name="Border radius on hover (in px)" type="number" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[3]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="hoverBorderShadow" name="Border shadow on hover (in px)" type="number" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[5]]></value>
+      </property>
+    </category>
+    <category id="Styling_active" name="Styling when clicked">
+      <property xsi:type="standardProperty" id="activeBorderColor" name="Border color on active" type="color" mode="dynamic" require="false" visible="true" colorFormat="rgb">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.SecondaryColor.ToRGB() %}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="activeBGColor" name="Background color on active" type="color" require="false" visible="true" colorFormat="rgb">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.WhiteColor.ToRGB() %}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="activeBorderSize" name="Border thickness on active (in px)" type="string" require="false" visible="false">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[{%= Theme.BorderWidth%}]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="activeBorderStyle" name="Border style on active" type="string" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[solid]]></value>
+        <options>
+          <option value="solid" text="solid" />
+          <option value="none" text="none" />
+          <option value="dashed" text="dashed" />
+        </options>
+      </property>
+      <property xsi:type="standardProperty" id="activeBorderRadius" name="Border radius on active (in px)" type="number" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[3]]></value>
+      </property>
+      <property xsi:type="standardProperty" id="activeBorderShadow" name="Border shadow on active (in px)" type="number" require="false" visible="true">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[5]]></value>
+      </property>
+    </category>
+  </properties>
+</control>

@@ -1,0 +1,225 @@
+{%
+Dim bordercolor = CurrentADC.PropValue("borderColor")
+Dim activebordercolor = CurrentADC.PropValue("activeBorderColor")
+Dim hoverbordercolor = CurrentADC.PropValue("hoverBorderColor")
+
+Dim bordersize = CurrentADC.PropValue("borderSize")
+Dim activebordersize = CurrentADC.PropValue("activeBorderSize")
+Dim hoverbordersize = CurrentADC.PropValue("hoverBorderSize")
+
+Dim bgcolor = CurrentADC.PropValue("bgColor")
+Dim activebgcolor = CurrentADC.PropValue("activeBGColor")
+Dim hoverbgcolor = CurrentADC.PropValue("hoverBGColor")
+
+Dim borderstyle = CurrentADC.PropValue("borderStyle")
+Dim activeborderstyle = CurrentADC.PropValue("activeBorderStyle")
+Dim hoverborderstyle = CurrentADC.PropValue("hoverBorderStyle")
+
+Dim borderradius = CurrentADC.PropValue("borderRadius")
+Dim activeborderradius = CurrentADC.PropValue("activeBorderRadius")
+Dim hoverborderradius = CurrentADC.PropValue("hoverBorderRadius")
+
+Dim bordershadow = CurrentADC.PropValue("borderShadow")
+Dim activebordershadow = CurrentADC.PropValue("activeBorderShadow")
+Dim hoverbordershadow = CurrentADC.PropValue("hoverBorderShadow")
+
+Dim textcolor = CurrentADC.PropValue("textColor")
+Dim paddingText = CurrentADC.PropValue("paddingText")
+Dim opacity = CurrentADC.PropValue("opacity")
+
+Dim controlwidth = CurrentADC.PropValue("controlWidth")
+Dim allowresize = On(CurrentADC.PropValue("allowResize")="1","both","none")
+Dim areatextalign = CurrentADC.PropValue("areaTextAlign")
+Dim counterposition = CurrentADC.PropValue("counterPosition")
+Dim counterfontsize = CurrentADC.PropValue("counterFontSize").ToNumber()
+
+Dim floatinglabeltextcolor = CurrentADC.PropValue("floatingLabelTextColor")
+dim congratsMessageBGColor = CurrentADC.PropValue("congratsMessageBGColor")
+
+'Dim fontsize = CurrentADC.PropValue("areaFontSize").ToNumber()
+Dim fontsizefactor = CurrentADC.PropValue("fontSizeFactor").ToNumber()
+dim basefontsize = fontsizefactor
+Dim hideNextButton = CurrentADC.PropValue("hideNext").ToNumber()
+%}
+
+{% IF hideNextButton = 1 Then %}
+input[name="Next"] { visibility:hidden;}
+{% EndIf %}
+
+#adc_{%= CurrentADC.InstanceId %} ul {
+  list-style-type: none;
+  padding: inherit;
+}
+
+#adc_{%= CurrentADC.InstanceId %} .askia-response input[type=checkbox] {
+    vertical-align: middle;
+    display: none;
+}
+
+#adc_{%= CurrentADC.InstanceId %} .adc-open-content {
+    max-width:{%=controlwidth%};
+    flex-direction:{%=On(counterposition.Left(1)="N","column","column-reverse")%};
+}
+
+#adc_{%= CurrentADC.InstanceId %} .caption {
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: 1.05rem;
+  padding: 10px 0;
+  width: 100%;
+  padding: 10px 0;
+  clear: both;
+}
+
+#adc_{%= CurrentADC.InstanceId %} textarea, #adc_{%= CurrentADC.InstanceId %} input{
+    border:{%=bordersize%} {%=borderstyle%} rgb({%=bordercolor%}) ;
+    background-color: rgba({%=bgcolor%},{%=opacity%});
+	font-size: {%=basefontsize%}rem;
+    resize:{%=allowresize%};
+    -moz-text-align: {%=areatextalign%}; /* Firefox 12+ */
+    text-align: {%=areatextalign%};
+    color: rgb({%=textcolor%});
+    width:auto;
+    max-width: 100%;
+}
+
+#adc_{%= CurrentADC.InstanceId %} .adc-open-content > textarea, #adc_{%= CurrentADC.InstanceId %} .adc-open-content > input{
+    -webkit-border-radius: {%=borderradius%}{%=On(borderradius.IsNumber(),"px","") %};
+    -moz-border-radius: {%=borderradius%}{%=On(borderradius.IsNumber(),"px","") %};
+    border-radius: {%=borderradius%}{%=On(borderradius.IsNumber(),"px","") %};
+    box-shadow: 0 0 {%=bordershadow%}{%=On(bordershadow.IsNumber(),"px","") %} rgb({%=bordercolor%});
+    -webkit-box-shadow: 0 0 {%=bordershadow%}{%=On(bordershadow.IsNumber(),"px","") %} rgb({%=bordercolor%});
+    -moz-box-shadow: 0 0 {%=bordershadow%}{%=On(bordershadow.IsNumber(),"px","") %} rgb({%=bordercolor%});
+    padding : {%= paddingText %};
+    width:auto;
+}
+
+#adc_{%= CurrentADC.InstanceId %} .adc-open-content >textarea:hover, #adc_{%= CurrentADC.InstanceId %} .adc-open-content>input:hover{
+    border: {%=hoverbordersize%} {%=hoverborderstyle%} rgb({%=hoverbordercolor%});
+    box-shadow: 0 0 {%=hoverbordershadow%}{%=On(hoverbordershadow.IsNumber(),"px","") %} rgb({%=hoverbordercolor%});
+    -webkit-box-shadow: 0 0 {%=hoverbordershadow%}{%=On(hoverbordershadow.IsNumber(),"px","") %} rgb({%=hoverbordercolor%});
+    -moz-box-shadow: 0 0 {%=hoverbordershadow%}{%=On(hoverbordershadow.IsNumber(),"px","") %} rgb({%=hoverbordercolor%});
+    background-color: rgba({%=hoverbgcolor%},{%=opacity%});
+    -webkit-border-radius: {%=hoverborderradius%}{%=On(hoverborderradius.IsNumber(),"px","") %};
+    -moz-border-radius: {%=hoverborderradius%}{%=On(hoverborderradius.IsNumber(),"px","") %};
+    border-radius: {%=hoverborderradius%}{%=On(hoverborderradius.IsNumber(),"px","") %};
+    width:auto;
+}
+
+#adc_{%= CurrentADC.InstanceId %} .adc-open-content > textarea:focus, #adc_{%= CurrentADC.InstanceId %} .adc-open-content>input:focus{
+    border: {%=activebordersize%} {%=activeborderstyle%} rgb({%=activebordercolor%});
+    box-shadow: 0 0 {%=activebordershadow%}{%=On(activebordershadow.IsNumber(),"px","") %} rgb({%=activebordercolor%});
+    -webkit-box-shadow: 0 0 {%=activebordershadow%}{%=On(activebordershadow.IsNumber(),"px","") %} rgb({%=activebordercolor%});
+    -moz-box-shadow: 0 0 {%=activebordershadow%}{%=On(activebordershadow.IsNumber(),"px","") %} rgb({%=activebordercolor%});
+    background-color: rgba({%=activebgcolor%},{%=opacity%});
+    -webkit-border-radius: {%=activeborderradius%}{%=On(activeborderradius.IsNumber(),"px","") %};
+    -moz-border-radius: {%=activeborderradius%}{%=On(activeborderradius.IsNumber(),"px","") %};
+    border-radius: {%=activeborderradius%}{%=On(activeborderradius.IsNumber(),"px","") %};
+    width:auto;
+}
+
+
+{%
+dim basefontsizelabel = 1 * basefontsize
+dim baselineheight = CurrentADC.PropValue("lineHeight").ToNumber()
+dim fontsizelabelactive = 0.75 * basefontsizelabel
+dim activeoffset = basefontsizelabel
+%}
+
+#adc_{%= CurrentADC.InstanceId %} .counterdiv{
+    font-size:{%=basefontsize * counterfontsize %}rem;
+    display:{%=On(counterposition="none","none","flex")%};
+    flex-flow:{%=On(counterposition.Right(1)="E","row-reverse wrap","row wrap")%};
+    line-height:{%=Theme.LineHeight%}rem;
+    padding:5px 0px 5px 0px;
+
+}
+
+#adc_{%= CurrentADC.InstanceId %} .counterdiv .suggestedchar{
+    padding-left:10px;
+}
+
+#adc_{%= CurrentADC.InstanceId %} .counterdiv b{
+    color:rgb({%= Theme.SecondaryColor.ToRGB() %});
+}
+
+#adc_{%= CurrentADC.InstanceId %} .invalidemail {
+    color:red;
+}
+#adc_{%= CurrentADC.InstanceId %} .invalidemail input{
+    border-color:red;
+}
+
+#adc_{%= CurrentADC.InstanceId %} label{
+
+}
+
+#adc_{%= CurrentADC.InstanceId %} label .floating-label {
+    width:100%;
+    height:5px;
+    cursor: text;
+    font-size: {%=basefontsizelabel%}rem;
+    line-height: {%=baselineheight%};
+    text-transform: uppercase;
+    -moz-transform: translateY(calc(-{%=baselineheight * basefontsizelabel %}rem));
+    -ms-transform: translateY(calc(-{%=baselineheight * basefontsizelabel %}rem));
+    -webkit-transform: translateY(calc(-{%=baselineheight * basefontsizelabel %}rem));
+    transform: translateY(-{%=baselineheight * basefontsizelabel %}rem);
+    transition: all 0.33s;
+    color: rgb({%=textcolor%});
+    background-color:transparent;
+}
+
+#adc_{%= CurrentADC.InstanceId %} label input, #adc_{%= CurrentADC.InstanceId %} label textarea {
+    width:100%;
+    border-top: 0;
+    border-left:0;
+    border-right:0;
+    /*font-size: {%=basefontsize%}rem;*/
+    transition: all 0.33s;
+    background-color:transparent;
+    padding: 0px 0px 0px 0px;
+    border-radius:0;
+}
+
+#adc_{%= CurrentADC.InstanceId %} label input:focus, #adc_{%= CurrentADC.InstanceId %} label textarea:focus {
+    border-bottom:{%=activebordersize%} {%=activeborderstyle%} rgb({%=activebordercolor%});
+}
+
+#adc_{%= CurrentADC.InstanceId %} label input:focus + .floating-label, #adc_{%= CurrentADC.InstanceId %} label textarea:focus + .floating-label {
+    color: rgb({%=floatingLabelTextColor%});
+    font-size: {%=fontsizelabelactive%}rem;
+    -moz-transform: translateY(calc(-{%=baselineheight * basefontsizelabel + activeoffset%}rem));
+     -ms-transform: translateY(calc(-{%=baselineheight * basefontsizelabel + activeoffset%}rem));
+     -webkit-transform: translateY(calc(-{%=baselineheight * basefontsizelabel + activeoffset%}rem));
+     transform: translateY(-{%=baselineheight * basefontsizelabel + activeoffset%}rem);
+}
+
+#adc_{%= CurrentADC.InstanceId %} label input:valid + .floating-label {
+    font-size: {%=fontsizelabelactive%}rem;
+    -moz-transform: translateY(calc(-{%=baselineheight * basefontsizelabel + activeoffset%}rem));
+    -ms-transform: translateY(calc(-{%=baselineheight * basefontsizelabel + activeoffset%}rem));
+    -webkit-transform: translateY(calc(-{%=baselineheight * basefontsizelabel + activeoffset%}rem));
+    -webkit-transform: translateY(calc(-{%=baselineheight * basefontsizelabel + activeoffset%}rem));
+    transform: translateY(-{%=baselineheight * basefontsizelabel + activeoffset%}rem);
+    background-color:transparent;
+}
+
+/***** congrats message ****/
+#adc_{%= CurrentADC.InstanceId %} .congrats-message {
+    background: rgba({%=congratsMessageBGColor%});
+    color: white;
+    font-size: 14px;
+    border-radius: 2px;
+    padding: 5px 14px;
+    font-weight: normal;
+    flex: 1;
+    min-width: 40%;
+}
+
+#adc_{%= CurrentADC.InstanceId %} .counter-helper{
+    margin:{%=On(counterposition.Right(1)="W","0 20px 0 0","0 0 0 20px")%};
+}
+
+
