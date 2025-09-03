@@ -1,4 +1,8 @@
-
+{% IF CurrentADC.PropValue("useAI") = "1" Then %}
+      {%:= CurrentADC.GetContent("dynamic/simpleprompt.js").ToText() %}
+{% Else %}
+      {%:= CurrentADC.GetContent("dynamic/aiprompt.js").ToText() %}
+{% EndIF %}
 
 {%
  Dim strInputIds = ""
@@ -20,38 +24,42 @@
  EndIf
 %}
 
-$(window).on("load",function() {
-	$('#adc_{%= CurrentADC.InstanceId %}').adcPrompt({
-     instanceId : {%= CurrentADC.InstanceID %},
-     inputId : '{%=CurrentQuestion.InputName()%}',
-     direction:"{%=CurrentADC.PropValue("counter")%}",
-     maxchar:{%=CurrentADC.PropValue("maxChar")%},
-     minchar:{%=CurrentADC.PropValue("minChar")%},
-     currentQuestion: '{%:= CurrentQuestion.Shortcut %}',
-     showcongrats:{%=CurrentADC.PropValue("showCongrats")%},
-     suggestedchar:{%=CurrentADC.PropValue("suggestedChar").ToNumber()%},
-     usebrowservalidation: {%=CurrentADC.PropValue("useBrowserValidation")%},
-     strExclusiveResponseIds : '{%=strInputIds %}',
-     isInLoop : {%= (CurrentADC.PropValue("isInLoop") = "1") %},
-     maxPrompts : {%=CurrentADC.PropValue("maxPrompts")%},
-     promptQuestion : "{%=CurrentADC.PropValue("promptQuestion")%}",
-     useAI : {%=CurrentADC.PropValue("useAI")%},
-     timePrompt : {%=CurrentADC.PropValue("timePrompts")%},
-     minChars : {%=CurrentADC.PropValue("minChars")%},
-     useSpace : {%=CurrentADC.PropValue("useSpace")%},
-     useEnd : {%=CurrentADC.PropValue("useEnd")%},
-     
-     items : [
-       {% IF CurrentADC.PropValue("isInLoop") = "1" Then %}
-           {%:= CurrentADC.GetContent("dynamic/open_loop.js").ToText() %}
-       {% EndIF %}   
-     ]
-    
- });
+
+
+$(window).on("load", function() {
+    var $el = $('#adc_{%= CurrentADC.InstanceId %}');
+
+    $el.adcOpen({
+        instanceId: {%= CurrentADC.InstanceID %},
+        inputId: '{%=CurrentQuestion.InputName()%}',
+        direction: "{%=CurrentADC.PropValue("counter")%}",
+        maxchar: {%=CurrentADC.PropValue("maxChar")%},
+        minchar: {%=CurrentADC.PropValue("minChar")%},
+        currentQuestion: '{%:= CurrentQuestion.Shortcut %}',
+        showcongrats: {%=CurrentADC.PropValue("showCongrats")%},
+        suggestedchar: {%=CurrentADC.PropValue("suggestedChar").ToNumber()%},
+        usebrowservalidation: {%=CurrentADC.PropValue("useBrowserValidation")%},
+        strExclusiveResponseIds: '{%=strInputIds %}',
+        isInLoop: {%= (CurrentADC.PropValue("isInLoop") = "1") %},
+        items: [
+            {% IF CurrentADC.PropValue("isInLoop") = "1" Then %}
+                {%:= CurrentADC.GetContent("dynamic/open_loop.js").ToText() %}
+            {% EndIF %}
+        ]
+    });
+
+    $el.adcPrompt({
+        instanceId: {%= CurrentADC.InstanceID %},
+        inputId: '{%=CurrentQuestion.InputName()%}',
+        maxPrompts: {%=CurrentADC.PropValue("maxPrompts")%},
+        promptQuestion: "{%=CurrentADC.PropValue("promptQuestion")%}",
+        useAI: {%=CurrentADC.PropValue("useAI")%},
+        timePrompt: {%=CurrentADC.PropValue("timePrompts")%},
+        minChars: {%=CurrentADC.PropValue("minChars")%},
+        useSpace: {%=CurrentADC.PropValue("useSpace")%},
+        useEnd: {%=CurrentADC.PropValue("useEnd")%}
+    });
 });
 
-{% IF CurrentADC.PropValue("useAI") = "1" Then %}
-      {%:= CurrentADC.GetContent("dynamic/simpleprompt.js").ToText() %}
-{% Else %}
-      {%:= CurrentADC.GetContent("dynamic/aiprompt.js").ToText() %}
-{% EndIF %}
+
+
