@@ -1,0 +1,96 @@
+p.bubble {
+	position: relative;
+	width: 300px;
+	text-align: center;
+	line-height: 1.4em;
+	margin: 20px auto;
+	background-color: #fff;
+	border: 2px solid #333;
+	border-radius: 30px;
+	font-family: sans-serif;
+	padding: 20px;
+	font-size: 85%;
+}
+
+p.ChangeTo {
+  background-color: #eeeeee;
+}
+
+p.thought {
+	width: 300px;
+	border-radius: 200px;
+	padding: 15px;	
+}
+
+p.bubble:before,
+p.bubble:after {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+}
+
+p.speech:before {
+	left: 30px;
+	bottom: -50px;
+	border: 25px solid;
+	border-color: #333 transparent transparent #333;
+}
+
+p.speech:after {
+	left: 38px;
+	bottom: -30px;
+	border: 15px solid;
+	border-color: #fff transparent transparent #fff;
+}
+
+p.thought:before,
+p.thought:after {
+	left: 10px;
+	bottom: -20px;
+	width: 20px;
+	height: 20px;
+	background-color: #fff;
+	border: 2px solid #333;
+	-webkit-border-radius: 28px;
+	-moz-border-radius: 28px;
+	border-radius: 28px;
+}
+
+p.thought:after {
+	width: 10px;
+	height: 10px;
+	left: 5px;
+	bottom: -30px;
+	-webkit-border-radius: 18px;
+	-moz-border-radius: 18px;
+	border-radius: 18px;
+}
+
+.jumping-dots {
+  display: inline-block;
+}
+.jumping-dots span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 2px;
+  background: #333;
+  border-radius: 50%;
+  animation: jump 0.6s infinite;
+}
+.jumping-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.jumping-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}

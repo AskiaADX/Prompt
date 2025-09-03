@@ -1,0 +1,136 @@
+<p id="messageDisplay_{%= CurrentADC.InstanceId %}" class="bubble thought" style="display:none"></p>
+
+{%
+Dim inputName  =  CurrentQuestion.InputName()
+Dim inputValue =  CurrentQuestion.InputValue()
+
+Dim i
+
+Dim floatinglabel = (CurrentADC.PropValue("floatingLabel")="1")
+
+Dim placeholder = On(floatinglabel and CurrentADC.PropValue("placeholder")="", currentQuestion.LongCaption, CurrentADC.PropValue("placeholder"))
+
+Dim attrPlaceholder = On(placeholder <> "" and Not(floatinglabel) , "placeholder=\"" + placeholder + "\"", "")
+Dim useBrowserValidation = "" + CurrentADC.PropValue("useBrowserValidation")
+
+Dim attrRequired = ""
+Dim maxchar = CurrentADC.PropValue("maxChar").ToNumber()
+Dim attrMaxLength = ""
+Dim minchar = CurrentADC.PropValue("minChar").ToNumber()
+Dim attrMinLength = ""
+
+if useBrowserValidation = "1" then
+	attrRequired = On(CurrentQuestion.IsAllowDK, "", "required=\"required\"")
+    attrMaxLength = "maxlength=\"" + maxchar + "\""
+   attrMinLength = "minlength=\"" + minchar + "\""
+else
+    if maxchar > 0 then
+        attrMaxLength = "onkeypress=\"return imposeMaxLength(event, this, "+maxchar+");\" onkeydown=\"return imposeMaxLengthOnKeydown(event, this, "+maxchar+");\" onpaste=\"return imposeMaxLengthOnPaste(event, this, "+maxchar+");\""
+    EndIf
+EndIf
+
+Dim suggestedchartext = CurrentADC.PropValue("suggestedCharText")
+Dim prefixtext = CurrentADC.PropValue("prefixText")
+Dim suggestedchar = CurrentADC.PropValue("suggestedChar").ToNumber()
+
+Dim countorder = CurrentADC.PropValue("counter")
+
+dim arearows = CurrentADC.PropValue("areaRows")
+dim areacolumns = CurrentADC.PropValue("areaColumns")
+'cols="areacolumns"
+dim attrControlAlign = CurrentADC.PropValue("controlAlign")
+
+dim attrInputType = CurrentADC.PropValue("inputType")
+
+Dim adcSelector = "adc_" + CurrentADC.InstanceId
+dim showCongrats = CurrentADC.PropValue("showCongrats")
+dim congratsMessage = CurrentADC.PropValue("congratsMessage")
+
+'On(countOrder="desc",maxchar,"0")
+
+Dim useExclusiveQuestion = CurrentADC.PropValue("useExclusive")
+%}
+
+    <div class="adc-open-content {%=attrControlAlign%}">
+
+        <div class="counterdiv">
+            <div class="counter-helper">
+            {%If prefixtext <>"" then%}
+            <span class="prefixtext">{%=prefixtext%}</span>
+            {%endif%}
+            <span class="counter">
+                <b>
+                {%If countorder="none" then%}
+                {%Else
+									If countorder = "desc" Then %}
+        				{%=maxchar%}
+    						{%else%}
+        				0
+								{%EndIf%}
+								{%endif%}
+                </b>
+            </span>
+            <span><b>{%=On(countorder <> "asc","","/"+maxchar)%}</b></span>
+             	{%If suggestedchar>0 Then%}
+                <span class="suggestedchar">
+                	{%=suggestedchartext%} <b>{%=suggestedchar%}</b>
+            	</span>
+                {%Endif%}
+          </div>
+            <div class="congrats-message" style="display:none">{%=congratsMessage%}</div>
+        </div>
+        <label for="{%= inputName %}" hidden>Open</label>
+        {% If attrInputType = "textarea" then %}
+					<textarea style="display:none;" autocomplete="off" class="otherHidden" rows="{%=arearows%}" name="{%= inputName %}" id="{%= inputName %}" {%:= attrPlaceholder %}
+					{%:= attrMaxLength %} {%:= attrMinLength %} {%:= attrRequired %}>{%= inputValue %}</textarea>
+        	<textarea class="contentinput" autocomplete="off" rows="{%=arearows%}" name="other{%= inputName %}" id="other{%= inputName %}" {%:= attrPlaceholder %}
+					{%:= attrMaxLength %} {%:= attrMinLength %} {%:= attrRequired %}>{%= inputValue %}</textarea>
+        {% Else %}
+        	{% If floatinglabel then %}<label>{% Endif %}
+					<input style="display:none;" autocomplete="off" type="{%= attrInputType %}" class="otherHidden" id="{%= inputName %}" name="{%= inputName %}" {%:= attrMaxLength %} {%:= attrPlaceholder %}
+					{%:= attrMinLength %} {%:= attrRequired %} value="{%= inputValue %}"/>
+
+        	<input class="contentinput" autocomplete="off" type="{%= attrInputType %}" id="other{%= inputName %}" name="other{%= inputName %}" {%:= attrMaxLength %} {%:= attrPlaceholder %}
+					{%:= attrMinLength %}  {%:= attrRequired %} value="{%= inputValue %}"/>
+          {% If floatinglabel then %}
+        	<span class="floating-label">{%:= Placeholder %}</span>
+        	{%Endif%}
+	        {% If floatinglabel then %}</label>{% Endif %}
+        {% Endif %}
+
+				{% If useExclusiveQuestion = "yes" Then
+				Dim exclusiveQuestion = CurrentADC.PropQuestion("exclusiveResponsesQuestion")
+				%}
+					{% If (exclusiveQuestion.Type = "single") Then %}
+						<ul>
+								{%
+								Dim exInputName
+								Dim exInputId
+								Dim exAttrChecked
+								Dim exCaption
+								Dim exResource
+								Dim exInputValue
+								Dim ar = exclusiveQuestion.AvailableResponses
+								For i = 1 To ar.Count
+										exInputName		= exclusiveQuestion.InputName()
+										exInputId     = (exInputName + "_" + ar[i].InputValue()).Replace("U", "askia-input")
+										exAttrChecked = On(ar[i].IsSelected, "checked=\"checked\"", "")
+										exInputValue  = ar[i].InputValue()
+										exCaption     = ar[i].Caption
+										exResource		= ar.ResourceURL[i]
+								%}
+								<li class="askia-response">
+										<input type="checkbox" name="{%= exInputName %}" id="{%= exInputId %}" value="{%= exInputValue %}" {%:= exAttrChecked %} class="askia-live dkButton"/>
+										<label for="{%= exInputId %}" class="askia-checkbox"><span hidden>checkbox</span></label>
+										<label for="{%= exInputId %}" class="askia-response-label">
+		                    {% IF (exResource <> "") Then %}
+		                      <img src="{%= exResource %}" style="vertical-align:middle" alt="{%:= exCaption %}"/>
+		                    {% EndIf %}{%:= exCaption %}
+		                </label>
+
+								</li>
+								{% Next i %}
+							</ul>
+					{% Endif %}
+				{% Endif %}
+    </div>

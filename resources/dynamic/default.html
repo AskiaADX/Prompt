@@ -1,0 +1,9 @@
+<div id="adc_{%= CurrentADC.InstanceId %}" class="adc-prompt">
+  {% If CurrentADC.PropValue("isInLoop") = "1" Then %}
+      {%:= CurrentADC.GetContent("dynamic/open_loop.html").ToText() %}
+  {% Else %}
+      {%:= CurrentADC.GetContent("dynamic/open.html").ToText() %}
+  {% EndIf %}
+
+</div>
+
