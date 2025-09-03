@@ -1,27 +1,28 @@
-(function() {
-var adcinstanceID = {%= CurrentADC.InstanceID %};
-
-var maxPrompt = {};
-var cntPrompt = {};
-var punctMarks = ['.', ',', '!', '?', ';'];
-
-
-maxPrompt[adcinstanceID] = {%=CurrentADC.PropValue("maxPrompts")%};
-cntPrompt[adcinstanceID] = 0;
+(function($) {
+    $.fn.adcPrompt = function(options) {
+        return this.each(function() {
+         console.log("Options passed in:", options);   
+        var $this = $(this);            
+		var adcinstanceID = options.instanceId;
+		var maxPrompt = options.maxPrompts;
+            console.log("maxPrompt typeof:", typeof maxPrompt);
+            console.log("maxPrompt value:", maxPrompt);
+		var cntPrompt = 0;
+		var punctMarks = ['.', ',', '!', '?', ';'];
 
 
     function displayRandomMessage() {
 		var questionText = '!!CurrentQuestion.LongCaption!!';
-		var responseText = document.getElementById('!!CurrentQuestion.InputName()!!').value.trim();
+		var responseText = document.getElementById(options.inputId).value.trim();
     	
     
 
 		// Just do nothing if there's no open end response or if the min char count is not met
-		if (responseText != "" && responseText != undefined && responseText.trim().length >= {%=CurrentADC.PropValue("minChars")%}) {
-			cntPrompt[adcinstanceID]++;
+		if (responseText != "" && responseText != undefined && responseText.trim().length >= options.minChars) {
+			cntPrompt++;
         
         // Make "Next" visible if cntPrompt >= 1
-    		if (cntPrompt[adcinstanceID] >= 1) {
+    		if (cntPrompt >= 1) {
         		const nextBtn = document.getElementsByName("Next")[0];
        			 if (nextBtn) {
           			  nextBtn.style.visibility = "visible";
@@ -29,7 +30,8 @@ cntPrompt[adcinstanceID] = 0;
    			 }
         
         	//Remove listeners if max prompts reached
-				if (cntPrompt[adcinstanceID] >= maxPrompt[adcinstanceID] && maxPrompt[adcinstanceID] != 0) { 
+            console.log("cntPrompt:", cntPrompt, "maxPrompt:", maxPrompt);
+				if (cntPrompt >= maxPrompt && maxPrompt != 0) { 
 		 			
 		  			window.removeEventListener("keyup", handleKeyup);
           			document.removeEventListener('keydown', handleSpacedown);
@@ -87,10 +89,11 @@ function handleSpacedown(event) {
         console.log("Prompt triggered by spacebar (instance " + adcinstanceID + ")"); 
     }
 }
-{% IF CurrentADC.PropValue("useSpace") = "1" Then %}
-document.addEventListener('keydown', handleSpacedown);
-{% EndIF %}
 
+if (options.useSpace) {
+document.addEventListener('keydown', handleSpacedown);
+}
+                         
 // PUNCTUATION LISTENER
 
 function handlePunctdown(event) {
@@ -99,15 +102,14 @@ function handlePunctdown(event) {
       console.log("Prompt triggered by punctuation (instance " + adcinstanceID + ")");
     }
   }
-{% IF CurrentADC.PropValue("useEnd") = "1" Then %}
-document.addEventListener('keydown', handlePunctdown);
-{% EndIF %}
 
+if (options.useEnd) {
+    document.addEventListener('keydown', handlePunctdown);
+}
 // TIME-BASED PROMPTS
-{% IF CurrentADC.PropValue("timePrompts") >= "1" Then %}
 
-   
-	let delay = {%=CurrentADC.PropValue("timePrompts")%} * 1000;
+if (options.timePrompt > 0) {  
+	let delay = options.timePrompt * 1000;
 	let typingTimer; // Variable to store the timeout ID
 
 	function handleKeyup() {
@@ -115,9 +117,12 @@ document.addEventListener('keydown', handlePunctdown);
    	 	typingTimer = setTimeout(displayRandomMessage, delay); // Set a new timeout
 	}
 
-window.addEventListener('load', function() {
-	window.addEventListener('keyup', handleKeyup);
-});	
-{% EndIF %}
+
+    window.addEventListener('keyup', handleKeyup);
+}
+
 console.log('adcinstanceID:', adcinstanceID);
-})();
+console.log(options.maxPrompts);
+    });
+ };
+})(jQuery);

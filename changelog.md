@@ -45,3 +45,6 @@ incorporated new ai script to non-ai model
 
 - Version 0.7.4
 changed naming convention for non-ai script model
+
+- Version 0.8.1
+encapsulated "simpleprompt" in a jquery function for initializing properties from default.js to remove askiascript substitution 

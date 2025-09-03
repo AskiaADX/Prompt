@@ -55,7 +55,7 @@ function triggerEvent(el, type) {
 
 
 (function ($) {
-	$.fn.adcPrompt = function adcPrompt(options) {
+	$.fn.adcOpen = function (options) {
 
   // Change event on input semi open
   var inputSemiOpens = document.querySelectorAll('#adc_' + options.instanceId + ' .contentinput');
