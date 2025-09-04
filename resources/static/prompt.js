@@ -3,7 +3,7 @@ async function getAI(aiInfo, options) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			[options.apiHead]: options.apiAuth
+			'options.apiHead': 'options.apiAuth'
 		},
 		body: JSON.stringify(aiInfo)
 	})
