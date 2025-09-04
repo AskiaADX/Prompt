@@ -36,8 +36,6 @@
       <content fileName="open.css" type="css" mode="dynamic" position="head" />
       <content fileName="default.js" type="javascript" mode="dynamic" position="foot" />
       <content fileName="open_loop.js" type="javascript" mode="dynamic" position="none" />
-      <content fileName="aiprompt.js" type="javascript" mode="dynamic" position="none" />
-      <content fileName="simpleprompt.js" type="javascript" mode="dynamic" position="none" />
       <content fileName="prompt.js" type="javascript" mode="static" position="foot" />
       <content fileName="aiprompt.css" type="css" mode="static" position="head" />
     </output>
