@@ -1,7 +1,10 @@
 {% IF CurrentADC.PropValue("useAI") = "1" Then %}
       {%:= CurrentADC.GetContent("dynamic/simpleprompt.js").ToText() %}
+
 {% Else %}
+
       {%:= CurrentADC.GetContent("dynamic/aiprompt.js").ToText() %}
+
 {% EndIF %}
 
 {%
@@ -24,7 +27,7 @@
  EndIf
 %}
 
-
+ 
 
 $(window).on("load", function() {
     var $el = $('#adc_{%= CurrentADC.InstanceId %}');
@@ -57,7 +60,17 @@ $(window).on("load", function() {
         timePrompt: {%=CurrentADC.PropValue("timePrompts")%},
         minChars: {%=CurrentADC.PropValue("minChars")%},
         useSpace: {%=CurrentADC.PropValue("useSpace")%},
-        useEnd: {%=CurrentADC.PropValue("useEnd")%}
+        useEnd: {%=CurrentADC.PropValue("useEnd")%},
+        promptArray:  [
+        {%
+          Dim i
+          Dim myQuestion = Survey.Questions.FindByShortcut(CurrentADC.PropValue("promptQuestion"))
+          For i = 1 To  myQuestion.Responses.Count 
+          %}"{%:= myQuestion.Responses[i].Caption %}" {%:= On(i <> myQuestion.Responses.Count, ",", "") %}
+          {%
+              Next
+          %}
+          ]
     });
 });
 

@@ -5,8 +5,6 @@
         var $this = $(this);            
 		var adcinstanceID = options.instanceId;
 		var maxPrompt = options.maxPrompts;
-            console.log("maxPrompt typeof:", typeof maxPrompt);
-            console.log("maxPrompt value:", maxPrompt);
 		var cntPrompt = 0;
 		var punctMarks = ['.', ',', '!', '?', ';'];
 
@@ -49,20 +47,10 @@ if (messageElement) {
             messageElement.style.display = '';        
         
 		// STEP 2: Build prompt
-  		var messages = [
-		{%
-			Dim i
-			Dim myQuestion = Survey.Questions.FindByShortcut(CurrentADC.PropValue("promptQuestion"))
-			For i = 1 To  myQuestion.Responses.Count 
-			%}"{%:= myQuestion.Responses[i].Caption %}" {%:= On(i <> myQuestion.Responses.Count, ",", "") %}
-			{%
-  				Next
-			%}
 
-  		];
 
-  var randomIndex = Math.floor(Math.random() * messages.length); 
-  var randomMessage = messages[randomIndex];
+  var randomIndex = Math.floor(Math.random() * options.promptArray.length); 
+  var randomMessage = options.promptArray[randomIndex];
 
     
   // STEP 3: Simulate a loading delay before showing Prompt
