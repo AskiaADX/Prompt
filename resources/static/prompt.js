@@ -1,3 +1,30 @@
+async function getAI(aiInfo) {
+	
+    return fetch('https://ipsos.litellm-prod.ai/v1/chat/completions', {
+	  method: 'POST',
+	  headers: {
+		'Content-Type': 'application/json',
+        {%="'" + CurrentADC.PropValue("apiHead") + "'"%}: {%="'" + CurrentADC.PropValue("apiAuth") + "'"%}   
+       
+	  },
+	  body: JSON.stringify(aiInfo)
+	})
+	.then(response => {
+	if (!response.ok) {
+	  throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	return response.json();
+	})
+	.then(data => {
+		console.log('Data received:', data);
+		// Process the JSON data here
+		return data;
+	})
+	.catch(error => {
+		console.error('Fetch error:', error);
+	});
+}
+
 (function($) {
     $.fn.adcPrompt = function(options) {
         return this.each(function() {
@@ -53,8 +80,32 @@ if (messageElement) {
                 var randomIndex = Math.floor(Math.random() * options.promptArray.length); 
                 var randomMessage = options.promptArray[randomIndex];
             }else{
-                randomMessage = "";
+                var aiInfo = {
+		        "model": "gpt-4o",
+		        "messages": [
+			{
+			  "role": "user",
+			  "content": "Given this question '" + questionText + "' and this response '" + responseText + "' and using the language in the response, provide a short one sentence to prompt for more detail. Do not provide reasoning or explanation."
+			}
+		  ]
+		};
+            try {
+                // STEP 3: Fetch AI result
+                var aiResult = await getAI(aiInfo);
+                var aiMessage = aiResult.choices[0].message.content;
 
+                // STEP 4: Replace loading dots with AI message
+                messageElement.textContent = aiMessage;
+
+                // STEP 5: Animate bubble
+                messageElement.classList.add("ChangeTo");
+                setTimeout(() => {
+                    messageElement.classList.remove("ChangeTo");
+                }, 1000);
+            } catch (error) {
+                console.error("AI fetch error:", error);
+                messageElement.textContent = "[Error generating prompt]";
+                }
             }
 
     
