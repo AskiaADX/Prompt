@@ -54,8 +54,8 @@
         <description><![CDATA[]]></description>
         <value><![CDATA[1]]></value>
         <options>
-          <option value="1" text="Survey Question" />
-          <option value="0" text="AI Model" />
+          <option value="1" text="AI Model" />
+          <option value="0" text="Survey Question" />
         </options>
       </property>
       <property xsi:type="standardProperty" id="promptQuestion" name="Prompt Question" type="string" require="false" visible="true">
