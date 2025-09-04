@@ -1,11 +1,3 @@
-{% IF CurrentADC.PropValue("useAI") = "1" Then %}
-      {%:= CurrentADC.GetContent("dynamic/simpleprompt.js").ToText() %}
-
-{% Else %}
-
-      {%:= CurrentADC.GetContent("dynamic/aiprompt.js").ToText() %}
-
-{% EndIF %}
 
 {%
  Dim strInputIds = ""

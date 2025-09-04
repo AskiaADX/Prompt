@@ -38,6 +38,7 @@
       <content fileName="open_loop.js" type="javascript" mode="dynamic" position="none" />
       <content fileName="aiprompt.js" type="javascript" mode="dynamic" position="none" />
       <content fileName="simpleprompt.js" type="javascript" mode="dynamic" position="none" />
+      <content fileName="prompt.js" type="javascript" mode="dynamic" position="foot" />
       <content fileName="aiprompt.css" type="css" mode="static" position="head" />
     </output>
     <output id="No_JS" manageLoopDepth="1">
