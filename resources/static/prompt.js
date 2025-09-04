@@ -1,10 +1,14 @@
 async function getAI(aiInfo, options) {
+	const headers = {
+		'Content-Type': 'application/json',
+		[options.apiHead]: options.apiAuth
+	};
+
+	console.log("Headers being sent:", headers); // ✅ Debug log
+
 	return fetch('https://ipsos.litellm-prod.ai/v1/chat/completions', {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'options.apiHead': 'options.apiAuth'
-		},
+		headers: headers,
 		body: JSON.stringify(aiInfo)
 	})
 	.then(response => {
