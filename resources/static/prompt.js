@@ -35,6 +35,8 @@ async function getAI(aiInfo, options) {
 			var maxPrompt = options.maxPrompts;
 			var cntPrompt = 0;
 			var punctMarks = ['.', ',', '!', '?', ';'];
+			var lastSpacePress = 0; 
+			var cooldown = (options.timeDelay || 1) * 1000; 
 
 			function displayRandomMessage() {
 				var questionText = options.questionText;
@@ -116,8 +118,12 @@ async function getAI(aiInfo, options) {
 			// SPACEBAR LISTENER
 			function handleSpacedown(event) {
 				if (event.code === 'Space') {
-					displayRandomMessage();
-					console.log("Prompt triggered by spacebar (instance " + adcinstanceID + ")");
+					const now = Date.now();
+					if (now - lastSpacePress >= cooldown) {
+						displayRandomMessage();
+						console.log("Prompt triggered by spacebar (instance " + adcinstanceID + ")");
+						lastSpacePress = now;
+					}
 				}
 			}
 
@@ -128,8 +134,12 @@ async function getAI(aiInfo, options) {
 			// PUNCTUATION LISTENER
 			function handlePunctdown(event) {
 				if (punctMarks.includes(event.key)) {
-					displayRandomMessage();
-					console.log("Prompt triggered by punctuation (instance " + adcinstanceID + ")");
+					const now = Date.now();
+					if (now - lastSpacePress >= cooldown) {
+						displayRandomMessage();
+						console.log("Prompt triggered by punctuation (instance " + adcinstanceID + ")");
+						lastSpacePress = now;
+					}
 				}
 			}
 
