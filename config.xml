@@ -66,7 +66,7 @@
       </property>
       <property xsi:type="standardProperty" id="timePrompts" name="Seconds between prompts (0 = disabled)" type="number" mode="dynamic" require="false" visible="true" min="0">
         <description><![CDATA[]]></description>
-        <value><![CDATA[7]]></value>
+        <value><![CDATA[5]]></value>
       </property>
       <property xsi:type="standardProperty" id="minChars" name="Minimum number of characters" type="number" mode="dynamic" require="false" visible="true" min="0">
         <description><![CDATA[]]></description>
@@ -80,13 +80,17 @@
           <option value="0" text="No" />
         </options>
       </property>
-      <property xsi:type="standardProperty" id="useEnd" name="Trigger prompt on punctuation (.,!?;)" type="number" require="false" visible="true" min="0" max="1">
+      <property xsi:type="standardProperty" id="useEnd" name="Trigger prompt on Punctuation (.,!?;)" type="number" require="false" visible="true" min="0" max="1">
         <description><![CDATA[]]></description>
         <value><![CDATA[1]]></value>
         <options>
           <option value="1" text="Yes" />
           <option value="0" text="No" />
         </options>
+      </property>
+      <property xsi:type="standardProperty" id="timeDelay" name="Delay (in seconds) between prompts triggered by Space or Punctuation" type="number" mode="dynamic" require="false" visible="true" min="0">
+        <description><![CDATA[]]></description>
+        <value><![CDATA[5]]></value>
       </property>
       <property xsi:type="standardProperty" id="hideNext" name="Hide Next button until prompt is triggered" type="number" require="false" visible="true" min="0" max="1">
         <description><![CDATA[]]></description>
