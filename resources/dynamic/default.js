@@ -46,15 +46,17 @@ $(window).on("load", function() {
     $el.adcPrompt({
         instanceId: {%= CurrentADC.InstanceID %},
         inputId: '{%=CurrentQuestion.InputName()%}',
+        questionText: '{%=CurrentQuestion.LongCaption%}',
         maxPrompts: {%=CurrentADC.PropValue("maxPrompts")%},
         promptQuestion: "{%=CurrentADC.PropValue("promptQuestion")%}",
         useAI: {%=CurrentADC.PropValue("useAI")%},
-        apiHead: '{%=CurrentADC.PropValue("apiHead")%}',
-        apiAuth: '{%=CurrentADC.PropValue("apiAuth")%}',
         timePrompt: {%=CurrentADC.PropValue("timePrompts")%},
+        timeDelay: {%=CurrentADC.PropValue("timeDelay")%},
         minChars: {%=CurrentADC.PropValue("minChars")%},
         useSpace: {%=CurrentADC.PropValue("useSpace")%},
         useEnd: {%=CurrentADC.PropValue("useEnd")%},
+        apiAuth: {%=CurrentADC.PropValue("apiAuth")%},
+        apiHead: {%=CurrentADC.PropValue("apiHead")%},
         promptArray:  [
         {%
           Dim i
