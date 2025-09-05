@@ -88,7 +88,7 @@
           <option value="0" text="No" />
         </options>
       </property>
-      <property xsi:type="standardProperty" id="timeDelay" name="Delay (in seconds) between prompts triggered by Space or Punctuation" type="number" mode="dynamic" require="false" visible="true" min="0">
+      <property xsi:type="standardProperty" id="timeDelay" name="Space/Punctuation Delay (in seconds)" type="number" mode="dynamic" require="false" visible="true" min="0">
         <description><![CDATA[]]></description>
         <value><![CDATA[5]]></value>
       </property>
