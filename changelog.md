@@ -51,4 +51,6 @@ encapsulated "simpleprompt" in a jquery function for initializing properties fro
 merged ai and simpleprompt scripts into single static prompt.js 
 migrated simpleprompt array logic to default.js
 removed redundant aiprompt and simpleprompt.js files from resource folder and config
+created "timeDelay" config to capture seconds between spacebar and punctuation presses
+included a cooldown script using options.timeDelay to prevent multiple prompts from being returned from rapid space/punctuation key presses
 
