@@ -1,4 +1,22 @@
 async function getAI(aiInfo, options) {
+	var inputElement = document.getElementById("other" + options.inputId);
+	var inputValue = inputElement ? inputElement.value.trim() : "";
+	var formElement = inputElement ? inputElement.previousElementSibling : null;
+
+	if(formElement !== null) {
+		formElement.value = "|" + inputValue;
+	}
+
+	if (window.askia
+		&& window.arrLiveRoutingShortcut
+		&& window.arrLiveRoutingShortcut.length > 0
+		&& window.arrLiveRoutingShortcut.indexOf(options.currentQuestion) >= 0) {
+		askia.triggerAnswer();
+	}
+
+
+	/* Client side request to AI service with dynamic headers */
+	/*
 	const headers = {
 		'Content-Type': 'application/json',
 		[options.apiHead]: options.apiAuth
@@ -24,11 +42,12 @@ async function getAI(aiInfo, options) {
 	.catch(error => {
 		console.error('Fetch error:', error);
 	});
+	*/
 }
 
 (function($) {
 	$.fn.adcPrompt = function(options) {
-		return this.each(function() {
+		
 			console.log("Options passed in:", options);
 			var $this = $(this);
 			var adcinstanceID = options.instanceId;
@@ -37,6 +56,9 @@ async function getAI(aiInfo, options) {
 			var punctMarks = ['.', ',', '!', '?', ';'];
 			var lastSpacePress = 0; 
 			var cooldown = (options.timeDelay || 1) * 1000; 
+			var inputElement = document.getElementById("other" + options.inputId);
+			var formElement = inputElement ? inputElement.previousElementSibling : null;			
+			var messageElement = document.getElementById("messageDisplay_" + adcinstanceID);
 
 			function displayRandomMessage() {
 				var questionText = options.questionText;
@@ -63,9 +85,6 @@ async function getAI(aiInfo, options) {
 						console.log("Listeners removed for instance " + adcinstanceID);
 					}
 
-					// Get unique container for this instance
-					var messageElement = document.getElementById("messageDisplay_" + adcinstanceID);
-
 					if (messageElement) {
 						// STEP 1: Show jumping dots as loading indicator
 						messageElement.innerHTML = `<span class="jumping-dots"><span></span><span></span><span></span></span> `;
@@ -83,7 +102,10 @@ async function getAI(aiInfo, options) {
 								]
 							};
 
-							getAI(aiInfo, options).then(data => {
+							getAI(aiInfo, options);
+							
+							/*
+							.then(data => {
 								let aiMessage = data?.choices?.[0]?.message?.content || "AI error: no response";
 
 								setTimeout(() => {
@@ -94,6 +116,7 @@ async function getAI(aiInfo, options) {
 									}, 1000);
 								}, 1000);
 							});
+							*/
 						} else {
 							// fallback to random prompt
 							var randomIndex = Math.floor(Math.random() * options.promptArray.length);
@@ -160,8 +183,31 @@ async function getAI(aiInfo, options) {
 				window.addEventListener('keyup', handleKeyup);
 			}
 
+			// GET AI RESPONSE
+			function handlePromptResponse(event) {
+				if(event.detail.question.shortcut === options.currentQuestion && event.detail.value.startsWith("||")) {
+					var aiMessage = event.detail.value.split("||")[1] || "AI error: no response";
+
+					setTimeout(() => {
+						messageElement.textContent = aiMessage;
+						messageElement.classList.add("ChangeTo");
+						setTimeout(() => {
+							messageElement.classList.remove("ChangeTo");
+
+							// Reset value
+							formElement.value = inputElement.value.trim();
+						}, 1000);
+					}, 1000);
+				}
+			}
+
+			if (options.useAI === 1 && formElement !== null) {
+				document.addEventListener('askiaSetValue', handlePromptResponse);
+			}
+
+
 			console.log('adcinstanceID:', adcinstanceID);
 			console.log(options.maxPrompts);
-		});
+	
 	};
 })(jQuery);

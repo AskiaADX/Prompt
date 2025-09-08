@@ -207,7 +207,7 @@ function debounce(fn, delay) {
     document.getElementById("other" + options.inputId).addEventListener('input', debounce(function (e) {
         uncheckResponses(options.strExclusiveResponseIds);
 
-        var inputcontent = "|" + this.value.trim();
+        var inputcontent = this.value.trim();
         this.previousElementSibling.value = inputcontent;
 
         options.counterdiv = getContainer(this.id).querySelector(options.adcSelector + " .counterdiv .counter b");

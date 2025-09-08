@@ -46,6 +46,7 @@ $(window).on("load", function() {
     $el.adcPrompt({
         instanceId: {%= CurrentADC.InstanceID %},
         inputId: '{%=CurrentQuestion.InputName()%}',
+        currentQuestion: '{%:= CurrentQuestion.Shortcut %}',
         questionText: '{%=CurrentQuestion.LongCaption%}',
         maxPrompts: {%=CurrentADC.PropValue("maxPrompts")%},
         promptQuestion: "{%=CurrentADC.PropValue("promptQuestion")%}",
