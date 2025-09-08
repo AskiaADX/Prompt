@@ -53,6 +53,15 @@ function triggerEvent(el, type) {
     }
 }
 
+// Add debounce function at the top or before usage
+function debounce(fn, delay) {
+    let timer = null;
+    return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+}
+
 
 (function ($) {
 	$.fn.adcOpen = function (options) {
@@ -127,7 +136,7 @@ function triggerEvent(el, type) {
     options.adcSelector = '#adc_' + options.instanceId;
 
     // var openInputDK = document.querySelector('#adc_' + this.instanceId + ' .openDK input[type="checkbox"]');
-
+/*
     document.getElementById('other'+options.inputId).addEventListener('keyup', function (e) {
         uncheckResponses(options.strExclusiveResponseIds);
 
@@ -158,7 +167,7 @@ function triggerEvent(el, type) {
             askia.triggerAnswer();
         }
     });
-
+*/
     // document.getElementById(options.inputId).addEventListener('focus', function (e) {
     //   uncheckResponses(options.strExclusiveResponseIds);
     // });
@@ -194,8 +203,11 @@ function triggerEvent(el, type) {
 
     });
 
-    document.getElementById("other" + options.inputId).addEventListener('input', function (e) {
-        var inputcontent = this.value.trim();
+    
+    document.getElementById("other" + options.inputId).addEventListener('input', debounce(function (e) {
+        uncheckResponses(options.strExclusiveResponseIds);
+
+        var inputcontent = "|" + this.value.trim();
         this.previousElementSibling.value = inputcontent;
 
         options.counterdiv = getContainer(this.id).querySelector(options.adcSelector + " .counterdiv .counter b");
@@ -225,7 +237,7 @@ function triggerEvent(el, type) {
             && window.arrLiveRoutingShortcut.indexOf(options.currentQuestion) >= 0) {
             askia.triggerAnswer();
         }
-    });
+    }, 300)); // 300ms debounce delay
   }
 }
 }(jQuery));
