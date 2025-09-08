@@ -55,9 +55,7 @@ $(window).on("load", function() {
         timeDelay: {%=CurrentADC.PropValue("timeDelay")%},
         minChars: {%=CurrentADC.PropValue("minChars")%},
         useSpace: {%=CurrentADC.PropValue("useSpace")%},
-        useEnd: {%=CurrentADC.PropValue("useEnd")%},
-        apiAuth: "{%=CurrentADC.PropValue("apiAuth")%}",
-        apiHead: "{%=CurrentADC.PropValue("apiHead")%}",
+        useEnd: {%=CurrentADC.PropValue("useEnd")%},        
         promptArray:  [
         {%
           Dim i

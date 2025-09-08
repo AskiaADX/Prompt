@@ -101,16 +101,6 @@
         </options>
       </property>
     </category>
-    <category id="connection" name="Connection Details">
-      <property xsi:type="standardProperty" id="apiAuth" name="Authentication Token" type="string" require="false" visible="true">
-        <description><![CDATA[]]></description>
-        <value></value>
-      </property>
-      <property xsi:type="standardProperty" id="apiHead" name="Authentication Header" type="string" require="false" visible="true">
-        <description><![CDATA[]]></description>
-        <value><![CDATA[x-litellm-api-key]]></value>
-      </property>
-    </category>
     <category id="features" name="Features">
       <property xsi:type="standardProperty" id="minChar" name="Minimum number of characters" type="number" mode="dynamic" require="false" visible="true" min="0">
         <description><![CDATA[]]></description>
